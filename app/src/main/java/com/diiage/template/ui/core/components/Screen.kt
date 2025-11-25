@@ -13,6 +13,37 @@ import com.diiage.template.ui.core.Destination
 import com.diiage.template.ui.core.ViewModel
 import com.diiage.template.ui.core.navigate
 
+/**
+ * A generic screen composable that handles common screen functionality for ViewModel-based screens.
+ *
+ * This composable provides a standardized way to handle state observation, event collection,
+ * back navigation, and focus management across all screens in the application.
+ *
+ * @param State The type of UI state managed by the ViewModel
+ * @param VM The type of ViewModel that extends [ViewModel]<State>
+ * @param viewModel The ViewModel instance that manages the screen's state and logic
+ * @param navController The NavController for handling navigation between screens
+ * @param onBack Optional callback for handling back button presses. If null, back press is disabled.
+ * @param onEvent Callback for handling custom events emitted by the ViewModel
+ * @param content The main composable content of the screen that receives state and ViewModel
+ *
+ * @see ViewModel
+ * @see NavController
+ * @see BackHandler
+ * @see LaunchedEffect
+ *
+ * @sample
+ * Screen(
+ *     viewModel = myViewModel,
+ *     navController = navController
+ * ) { state, viewModel ->
+ *     MyScreenContent(
+ *         state = state,
+ *         onAction = { viewModel.handleAction(it) }
+ *     )
+ * }
+ *
+ */
 @Composable
 fun <State, VM: ViewModel<State>> Screen(
     viewModel: VM,
