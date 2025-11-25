@@ -45,17 +45,17 @@ class SplashViewModel(
             },
             onResult = {
                 onSuccess {
-                    sendEvent(Destination.Home)
+                    sendEvent(Destination.Login)
                 }
                 onFailure {
                     // Even if there's an error, navigate to login after delay
-                    sendEvent(Destination.Home)
+                    sendEvent(Destination.Login)
                 }
             }
         )
     }
 
     private fun navigateTo() {
-        sendEvent(Destination.Home)
+        sendEvent(Destination.Login)
     }
 }

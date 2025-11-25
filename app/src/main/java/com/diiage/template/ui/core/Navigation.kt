@@ -13,6 +13,7 @@ import androidx.navigation.Navigator
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.diiage.template.ui.screens.home.HomeScreen
+import com.diiage.template.ui.screens.login.LoginScreen
 import com.diiage.template.ui.screens.splash.SplashScreen
 
 sealed class Destination(val route: String, val arguments: List<NamedNavArgument> = emptyList()) {
@@ -21,6 +22,7 @@ sealed class Destination(val route: String, val arguments: List<NamedNavArgument
     object Splash : Destination(route = "splash")
 
     object Home : Destination(route = "home")
+    object Login : Destination(route = "login")
 }
 
 // Extension for NavGraphBuilder
@@ -60,5 +62,6 @@ fun NavHost(
         // Authentication Flow
         composable(Destination.Splash) { SplashScreen(navController) }
         composable(Destination.Home) { HomeScreen(navController) }
+        composable(Destination.Login) { LoginScreen(navController) }
     }
 }
