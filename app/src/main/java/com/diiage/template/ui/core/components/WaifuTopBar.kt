@@ -43,7 +43,6 @@ fun WaifuTopBar(
                 text = "Waifu",
                 style = MaterialTheme.typography.titleLarge,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
             )
         },
         actions = {
