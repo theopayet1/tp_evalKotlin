@@ -12,10 +12,12 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.diiage.template.ui.core.AppNavHost
 import com.diiage.template.ui.core.Destination
+import com.diiage.template.ui.core.ThemeMenuViewModel
 import com.diiage.template.ui.core.components.WaifuTopBar
 import com.diiage.template.ui.core.theme.AppTheme
 
@@ -24,9 +26,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            AppTheme {
-                App()
-            }
+            AppTheme { App() }
         }
     }
 }
@@ -34,14 +34,18 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun App() {
     val navController = rememberNavController()
+    val themeMenuViewModel: ThemeMenuViewModel = viewModel()
+
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
 
-    //permet d'être present sur tout les screens
     Scaffold(
         topBar = {
             if (currentRoute == Destination.Home.route) {
-                WaifuTopBar(title = "WaifuCringe")
+                WaifuTopBar(
+                    onNextThemeClicked = { themeMenuViewModel.onNextThemeClicked() },
+                    onThemeSelected = { themeMenuViewModel.onThemeSelected(it) }
+                )
             }
         },
         modifier = Modifier.fillMaxSize()

@@ -1,11 +1,10 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+@file:OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
 
 package com.diiage.template.ui.core.components
 
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -21,15 +20,13 @@ import com.diiage.template.ui.core.theme.ThemeManager
 import com.diiage.template.ui.core.theme.ThemeState
 
 /**
- * TopBar de l'app :
- * - Titre centré
- * - Menu déroulant pour changer le thème (Light/Dark/System)
- *
- * @param title Titre au centre de la barre.
+ * TopBar "Waifu" avec menu thème.
+ * La TopBar ne gère pas la logique : elle déclenche juste des callbacks (ViewModel).
  */
 @Composable
 fun WaifuTopBar(
-    title: String = "WaifuCringe"
+    onNextThemeClicked: () -> Unit,
+    onThemeSelected: (ThemeState) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
     val currentThemeLabel = when (ThemeManager.themeState) {
@@ -41,14 +38,13 @@ fun WaifuTopBar(
     CenterAlignedTopAppBar(
         title = {
             Text(
-                text = title,
+                text = "Waifu",
                 style = MaterialTheme.typography.titleLarge,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
         },
         actions = {
-            // Pas d'icône pour éviter toute dépendance "icons-extended"
             IconButton(onClick = { expanded = true }) {
                 Text(text = "⋮")
             }
@@ -58,31 +54,26 @@ fun WaifuTopBar(
                 onDismissRequest = { expanded = false }
             ) {
                 DropdownMenuItem(
-                    text = { Text("Thème actuel : $currentThemeLabel") },
-                    onClick = { expanded = false }
-                )
-
-                DropdownMenuItem(
-                    text = { Text("Forcer : Light") },
+                    text = { Text("Light") },
                     onClick = {
                         expanded = false
-                        ThemeManager.setTheme(ThemeState.Light)
+                        onThemeSelected(ThemeState.Light)
                     }
                 )
 
                 DropdownMenuItem(
-                    text = { Text("Forcer : Dark") },
+                    text = { Text("Dark") },
                     onClick = {
                         expanded = false
-                        ThemeManager.setTheme(ThemeState.Dark)
+                        onThemeSelected(ThemeState.Dark)
                     }
                 )
 
                 DropdownMenuItem(
-                    text = { Text("Forcer : System") },
+                    text = { Text("System") },
                     onClick = {
                         expanded = false
-                        ThemeManager.setTheme(ThemeState.System)
+                        onThemeSelected(ThemeState.System)
                     }
                 )
             }
@@ -94,6 +85,9 @@ fun WaifuTopBar(
 @Composable
 private fun WaifuTopBarPreview() {
     AppTheme {
-        WaifuTopBar()
+        WaifuTopBar(
+            onNextThemeClicked = {},
+            onThemeSelected = {}
+        )
     }
 }
