@@ -1,5 +1,6 @@
 package com.diiage.template.di
 
+import com.diiage.template.data.remote.LoginAPI
 import com.diiage.template.data.repository.*
 import com.diiage.template.domain.repository.*
 import com.diiage.template.data.remote.createHttpClient
@@ -39,7 +40,9 @@ val appModule = module {
     }
 
     // Single instance (singleton) of LoginService
+    single { LoginAPI(get()) }
     single<LoginRepository> { LoginRepositoryImpl(get()) }
+
 
     // Add other dependencies here as needed
     // single { YourRepository() }
