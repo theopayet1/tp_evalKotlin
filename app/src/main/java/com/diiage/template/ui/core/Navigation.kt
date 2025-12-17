@@ -59,19 +59,6 @@ fun NavController.navigate(
     )
 }
 
-/**
- * Navigation utile après un écran d’entrée (Splash, Login…).
- * Elle remplace la pile de navigation pour éviter un retour arrière sur l’écran précédent.
- */
-fun NavController.navigateAndClearBackStack(
-    destination: Destination
-) {
-    navigate(destination.route) {
-        popUpTo(graph.startDestinationId) { inclusive = true }
-        launchSingleTop = true
-        restoreState = false
-    }
-}
 
 /**
  * Hôte de navigation principal.
