@@ -31,7 +31,19 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
+/**
+ * Composable racine de l’application.
+ *
+ * Ce composant :
+ * - initialise le [NavController],
+ * - observe la destination courante,
+ * - affiche dynamiquement la TopBar selon l’écran,
+ *
+ * La TopBar n’est affichée que sur l’écran Home
+ *
+ * Les actions liées au changement de thème sont déléguées
+ * au [ThemeMenuViewModel].
+ */
 @Composable
 fun App() {
     val navController = rememberNavController()

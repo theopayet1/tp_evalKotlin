@@ -18,6 +18,23 @@ import com.diiage.template.ui.core.extensions.navigateAndClearBackStack
 import com.diiage.template.ui.core.theme.AppTheme
 import kotlinx.coroutines.delay
 
+/**
+ * Écran Splash de l’application.
+ *
+ * Cet écran est affiché au démarrage de l’application.
+ * Il sert à présenter brièvement l’identité de l’app,
+ *
+ * redirige automatiquement vers l’écran Home après un court délai.
+ *
+ *
+ *
+ * @param navController Contrôleur de navigation utilisé pour la redirection.
+ *
+ * @see Destination.Home
+ * @see androidx.compose.runtime.LaunchedEffect
+ */
+
+
 @Composable
 fun SplashScreen(navController: NavController) {
     LaunchedEffect(Unit) {

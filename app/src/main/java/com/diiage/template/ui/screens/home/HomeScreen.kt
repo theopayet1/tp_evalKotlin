@@ -26,6 +26,21 @@ import com.diiage.template.domain.model.WaifuImage
 import com.diiage.template.ui.core.components.input.PrimaryButton
 import com.diiage.template.ui.core.theme.AppTheme
 import org.koin.androidx.compose.koinViewModel
+/**
+ * Contenu principal de l’écran Home.
+ *
+ * Ce composant gère l’affichage des différents états de l’écran :
+ * - chargement des données (indicateur de progression),
+ * - affichage d’une erreur avec possibilité de réessayer,
+ * - affichage d’une grille d’images lorsque les données sont disponibles.
+ *
+ *
+ * @param state État UI courant de l’écran Home (loading, erreur, données).
+ * @param onRetry Action déclenchée lorsque l’utilisateur souhaite relancer le chargement.
+ *
+ * @see WaifuImage
+ * @see HomeContracts.UiState
+ */
 
 @Composable
 fun HomeScreen(navController: NavController) {

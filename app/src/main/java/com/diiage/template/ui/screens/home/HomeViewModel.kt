@@ -8,7 +8,23 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import com.diiage.template.domain.model.WaifuImage
-
+/**
+ * ViewModel de l’écran Home.
+ *
+ * Ce ViewModel est responsable de :
+ * - déclencher le chargement des waifus au démarrage de l’écran,
+ * - exposer un état UI immuable via [StateFlow],
+ * - gérer les actions utilisateur (Load, Retry),
+ *
+ * Le ViewModel dépend uniquement du domaine via [GetPortraitWaifusUseCase].
+ *
+ *
+ * @param getPortraitWaifus Use case chargé de récupérer les waifus portrait.
+ *
+ * @see HomeContracts.UiState
+ * @see HomeContracts.UiAction
+ * @see GetPortraitWaifusUseCase
+ */
 object HomeContracts {
 
     data class UiState(
