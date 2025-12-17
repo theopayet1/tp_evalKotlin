@@ -2,7 +2,11 @@ package com.diiage.template.di
 
 import com.diiage.template.data.repository.*
 import com.diiage.template.domain.repository.*
+import com.diiage.template.data.remote.createHttpClient
 import org.koin.dsl.module
+import io.ktor.client.HttpClient
+
+private const val RMAPI_URL = "http://98.66.234.231:8000/api/"
 
 /**
  * Koin dependency injection module for the application.
@@ -28,8 +32,14 @@ import org.koin.dsl.module
  * }
  */
 val appModule = module {
+    single<HttpClient> {
+        createHttpClient(
+            baseUrl = RMAPI_URL
+        )
+    }
+
     // Single instance (singleton) of LoginService
-    single<LoginRepository> { LoginRepositoryImpl() }
+    single<LoginRepository> { LoginRepositoryImpl(get()) }
 
     // Add other dependencies here as needed
     // single { YourRepository() }

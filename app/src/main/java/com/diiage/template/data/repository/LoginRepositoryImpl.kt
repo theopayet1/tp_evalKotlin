@@ -1,5 +1,6 @@
 package com.diiage.template.data.repository
 
+import com.diiage.template.data.remote.LoginAPI
 import com.diiage.template.domain.model.LoginResponse
 import com.diiage.template.domain.repository.LoginRepository
 import kotlinx.coroutines.delay
@@ -14,7 +15,9 @@ import kotlin.text.equals
  *
  * @constructor Creates a new instance of the login repository implementation.
  */
-class LoginRepositoryImpl : LoginRepository {
+internal class LoginRepositoryImpl(
+    private val loginAPI: LoginAPI
+) : LoginRepository {
 
     /**
      * Attempts to authenticate a user with the provided identification.
