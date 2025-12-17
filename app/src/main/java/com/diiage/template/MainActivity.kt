@@ -18,7 +18,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.diiage.template.ui.core.AppNavHost
 import com.diiage.template.ui.core.Destination
-import com.diiage.template.ui.core.ThemeMenuViewModel
+import com.diiage.template.ui.core.components.ThemeMenuViewModel
 import com.diiage.template.ui.core.components.WaifuTopBar
 import com.diiage.template.ui.core.theme.AppTheme
 

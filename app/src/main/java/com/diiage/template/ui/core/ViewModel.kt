@@ -13,83 +13,47 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 
 /**
- * A base ViewModel class that provides common functionality for state management and data handling.
+ * ViewModel de base générique utilisé dans l’application.
  *
- * This class extends [AndroidViewModel] and implements [KoinComponent] for dependency injection.
- * It provides a structured approach to managing UI state, events, and asynchronous data operations.
+ * Cette classe fournit une implémentation commune pour :
+ * - la gestion d’un état UI via [StateFlow],
+ * - l’envoi d’événements one-shot (navigation, messages, actions ponctuelles),
+ * - l’exécution de traitements asynchrones de manière sécurisée.
  *
- * @param State The type of the UI state managed by this ViewModel
- * @param initialState The initial state when the ViewModel is created
- * @param application The application context
+ * L’état est exposé sous forme de [StateFlow]
  *
- * @property state The current UI state as a [StateFlow] for observing state changes
- * @property events A flow of one-time events that should be handled by the UI
+ * Les événements sont transmis via un [Channel] pour éviter les répétitions
  *
- * @see AndroidViewModel
- * @see KoinComponent
+ * La méthode [fetchData] fournit un helper standardisé pour :
+ * - exécuter une opération asynchrone en arrière-plan,
+ * - gérer le succès et l’erreur,
+ * - renvoyer le résultat sur le thread principal.
+ *
+ *
+ * @param State Type représentant l’état UI associé au ViewModel.
+ * @param application Contexte application utilisé par [AndroidViewModel].
+ *
  * @see StateFlow
  * @see Channel
- *
- * @sample
- * // Example usage:
- * class MyViewModel(application: Application) : ViewModel<MyState>(
- *     initialState = MyState(),
- *     application = application
- * ) {
- *     fun loadData() {
- *         fetchData(
- *             source = { repository.getData() },
- *             onResult = { result ->
- *                 result.onSuccess { data ->
- *                     updateState { copy(data = data) }
- *                 }.onFailure { error ->
- *                     sendEvent(ErrorEvent(error.message))
- *                 }
- *             }
- *         )
- *     }
- * }
+ * @see AndroidViewModel
  */
+
 open class ViewModel<State>(initialState: State, application: Application): AndroidViewModel(application),
     KoinComponent {
 
-    /**
-     * Private mutable state flow that holds the current UI state.
-     */
+
     private val _state = MutableStateFlow(initialState)
 
-    /**
-     * Public immutable state flow that exposes the current UI state.
-     * Use this to observe state changes in Composables or Activities/Fragments.
-     */
     val state: StateFlow<State>
         get() = _state
 
-    /**
-     * Private channel for sending one-time events to the UI.
-     */
+
     private val _events = Channel<Any>(Channel.BUFFERED)
 
-    /**
-     * Public flow of events that should be handled by the UI.
-     * These are typically one-time events like navigation commands, toast messages, or dialogs.
-     */
+
     val events: Flow<Any>
         get() = _events.receiveAsFlow()
 
-    /**
-     * Sends a one-time event to the UI layer.
-     *
-     * Events are useful for actions that should be handled once, such as showing
-     * a snackbar, navigating to another screen, or displaying a dialog.
-     *
-     * @param obj The event object to send to the UI
-     *
-     * @sample
-     * // Send event example:
-     * sendEvent(NavigationEvent.Destination.Home)
-     * sendEvent(MessageEvent("Data loaded successfully"))
-     */
     protected fun sendEvent(obj: Any) {
         viewModelScope.launch {
             _events.send(obj)
@@ -97,32 +61,6 @@ open class ViewModel<State>(initialState: State, application: Application): Andr
     }
 
 
-    /**
-     * Fetches data from a suspending function and handles the results on the appropriate dispatchers.
-     *
-     * This method automatically handles the coroutine context switching:
-     * - Execution happens on IO dispatcher for background work
-     * - Results are delivered on Main dispatcher for UI updates
-     * - Errors are caught and delivered as [Result.failure]
-     *
-     * @param T The type of data being fetched
-     * @param source A suspending function that returns the data to fetch
-     * @param onResult A callback function that receives the result of the operation
-     *
-     * @sample
-     * // Fetch data example:
-     * fetchData(
-     *     source = { repository.fetchUserData() },
-     *     onResult = { result ->
-     *         result.onSuccess { user ->
-     *             updateState { copy(user = user, isLoading = false) }
-     *         }.onFailure { error ->
-     *             updateState { copy(isLoading = false) }
-     *             sendEvent(ErrorEvent("User data load failed"))
-     *         }
-     *     }
-     * )
-     */
     fun <T> fetchData(
         source: suspend () -> T,
         onResult: Result<T>.() -> Unit
