@@ -6,16 +6,17 @@ import com.diiage.template.ui.core.ViewModel
 import kotlinx.coroutines.delay
 
 interface SplashContracts {
+
     data class UiState(
         val isLoading: Boolean = true
     )
 
     sealed interface UiAction {
-        object SplashCompleted : UiAction
+        data object SplashCompleted : UiAction
     }
 
     sealed interface Event {
-        object NavigateTo : Event
+        data class NavigateTo(val destination: Destination) : Event
     }
 }
 
@@ -27,35 +28,28 @@ class SplashViewModel(
 ) {
 
     init {
-        // Start the splash timer when ViewModel is created
         startSplashTimer()
     }
 
     fun handleAction(action: SplashContracts.UiAction) {
         when (action) {
-            SplashContracts.UiAction.SplashCompleted -> navigateTo()
+            SplashContracts.UiAction.SplashCompleted -> navigateToHome()
         }
     }
 
     private fun startSplashTimer() {
         fetchData(
             source = {
-                delay(2000) // 2 seconds splash duration
-                true // Return a dummy value since we just need the delay
+                delay(2000)
+                true  // true est pas unit pour eviter le warning
             },
             onResult = {
-                onSuccess {
-                    sendEvent(Destination.Login)
-                }
-                onFailure {
-                    // Even if there's an error, navigate to login after delay
-                    sendEvent(Destination.Login)
-                }
+                navigateToHome()
             }
         )
     }
 
-    private fun navigateTo() {
-        sendEvent(Destination.Login)
+    private fun navigateToHome() {
+        sendEvent(SplashContracts.Event.NavigateTo(Destination.Home))
     }
 }
