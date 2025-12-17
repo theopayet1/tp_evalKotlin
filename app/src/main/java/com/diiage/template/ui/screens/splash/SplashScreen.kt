@@ -14,7 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.diiage.template.ui.core.Destination
-import com.diiage.template.ui.core.navigateAndClearBackStack
+import com.diiage.template.ui.core.extensions.navigateAndClearBackStack
 import com.diiage.template.ui.core.theme.AppTheme
 import kotlinx.coroutines.delay
 
