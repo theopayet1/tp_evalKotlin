@@ -18,24 +18,13 @@ import com.diiage.template.ui.screens.splash.SplashScreen
 /**
  * Système de navigation de l’application.
  *
- * Cette navigation repose sur une sealed class [Destination] afin de définir
- * l’ensemble des écrans de manière type-safe, sans utiliser de routes en String
- * dispersées dans le code.
  *
  * Les extensions sur [NavGraphBuilder] et [NavController] permettent :
  * - d’ajouter des écrans de façon lisible et cohérente,
  * - de naviguer entre les écrans sans risque d’erreur de route,
- * - de centraliser la logique de navigation au même endroit.
  *
  * Le composable [AppNavHost] représente le point d’entrée de la navigation.
- * Il définit le graphe principal et le cycle de vie des écrans :
- * - démarrage sur l’écran Splash,
- * - navigation contrôlée vers l’écran Home.
  *
- * Cette approche améliore :
- * - la lisibilité du code,
- * - la maintenabilité,
- * - la compréhension du parcours utilisateur.
  *
  * @see Destination
  * @see AppNavHost
