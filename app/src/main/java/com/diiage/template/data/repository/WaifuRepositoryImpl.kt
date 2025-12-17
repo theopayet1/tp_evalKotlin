@@ -5,6 +5,8 @@ import com.diiage.template.data.remote.WaifuApi
 import com.diiage.template.domain.model.WaifuImage
 import com.diiage.template.domain.repository.WaifuRepository
 
+//frontière entre la couche data et la couche domain
+// tranforme le dto en model domain
 class WaifuRepositoryImpl(
     private val api: WaifuApi
 ) : WaifuRepository {

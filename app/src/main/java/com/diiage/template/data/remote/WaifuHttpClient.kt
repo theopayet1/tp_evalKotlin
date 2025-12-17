@@ -10,16 +10,18 @@ import io.ktor.http.HttpHeaders
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
-
+//configuration globale du client HTTP
+//Ktor est le client HTTP
+//CIO est l’engine réseau utilisé
 object WaifuHttpClient {
 
     fun create(): HttpClient {
         return HttpClient(CIO) {
-            install(ContentNegotiation) {
+            install(ContentNegotiation) {//ça permet de transformer automatiquement le JSON en objets Kotlin
                 json(
                     Json {
                         ignoreUnknownKeys = true
-                        isLenient = true
+                        isLenient = true//plus permisif
                     }
                 )
             }
