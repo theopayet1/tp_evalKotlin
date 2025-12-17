@@ -5,6 +5,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+/**
+ * Gestion centralisée du thème de l’application.
+ *
+ *les états possibles du thème ([ThemeState]) : Clair, Sombre ou Système,
+ *
+ * La fonction [isDarkTheme] est composable afin de réagir automatiquement
+ * aux changements de thème et de garantir une mise à jour
+ *
+ * @see ThemeState
+ * @see androidx.compose.foundation.isSystemInDarkTheme
+ */
 
 sealed class ThemeState {
     object Light : ThemeState()

@@ -5,7 +5,17 @@ import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
-
+/**
+ * Déclenche une vibration courte
+ *
+ * Cette extension sur [Context] centralise l’accès à l’API de vibration Android
+ * et masque les différences d’implémentation entre les versions du système.
+ *
+ * ot varie la methode seulont la version android
+ *
+ * @see android.os.Vibrator
+ * @see android.os.VibratorManager
+ */
 fun Context.vibrateClick() {
     val durationMs = 30L
 

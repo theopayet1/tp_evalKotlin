@@ -5,8 +5,20 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-
-
+/**
+ * Thème principal de l’application.
+ * palettes de couleurs Light et Dark,
+ *
+ *
+ * Le thème actif  est déterminé par [ThemeManager]
+ *
+ *
+ * Ce thème est appliqué au niveau racine de l’application via [AppTheme]
+ *
+ * @see ThemeManager
+ * @see androidx.compose.material3.MaterialTheme
+ */
+// je sais j'aurais pue faire comme pour les langue pour la selection de theme
 private val LightColorScheme = lightColorScheme(
     primary = BlueDiiage,
     onPrimary = White,

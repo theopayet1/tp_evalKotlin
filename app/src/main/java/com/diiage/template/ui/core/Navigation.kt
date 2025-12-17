@@ -16,9 +16,33 @@ import com.diiage.template.ui.screens.home.HomeScreen
 import com.diiage.template.ui.screens.splash.SplashScreen
 
 /**
- * Décrit les écrans de l’application via des routes “type-safe”.
- * Objectif : éviter les strings en dur partout et limiter les fautes de frappe.
+ * Système de navigation de l’application.
+ *
+ * Cette navigation repose sur une sealed class [Destination] afin de définir
+ * l’ensemble des écrans de manière type-safe, sans utiliser de routes en String
+ * dispersées dans le code.
+ *
+ * Les extensions sur [NavGraphBuilder] et [NavController] permettent :
+ * - d’ajouter des écrans de façon lisible et cohérente,
+ * - de naviguer entre les écrans sans risque d’erreur de route,
+ * - de centraliser la logique de navigation au même endroit.
+ *
+ * Le composable [AppNavHost] représente le point d’entrée de la navigation.
+ * Il définit le graphe principal et le cycle de vie des écrans :
+ * - démarrage sur l’écran Splash,
+ * - navigation contrôlée vers l’écran Home.
+ *
+ * Cette approche améliore :
+ * - la lisibilité du code,
+ * - la maintenabilité,
+ * - la compréhension du parcours utilisateur.
+ *
+ * @see Destination
+ * @see AppNavHost
+ * @see androidx.navigation.compose.NavHost
  */
+
+
 sealed class Destination(
     val route: String,
     val arguments: List<NamedNavArgument> = emptyList()
@@ -27,9 +51,7 @@ sealed class Destination(
     object Home : Destination(route = "home")
 }
 
-/**
- * Variante pratique de `composable()` : on passe un [Destination] au lieu d’une route en String.
- */
+
 fun NavGraphBuilder.composable(
     destination: Destination,
     deepLinks: List<NavDeepLink> = emptyList(),
@@ -44,9 +66,7 @@ fun NavGraphBuilder.composable(
     }
 }
 
-/**
- * Navigation “type-safe” : on navigue vers un [Destination] plutôt que vers une String.
- */
+
 fun NavController.navigate(
     destination: Destination,
     navOptions: NavOptions? = null,
@@ -60,12 +80,6 @@ fun NavController.navigate(
 }
 
 
-/**
- * Hôte de navigation principal.
- *
- * Note : le nom est volontairement `AppNavHost` pour éviter le conflit avec
- * `androidx.navigation.compose.NavHost`.
- */
 @Composable
 fun AppNavHost(
     navController: NavHostController,

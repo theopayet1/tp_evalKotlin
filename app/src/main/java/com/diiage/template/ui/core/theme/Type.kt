@@ -6,7 +6,10 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
-// Rename to avoid conflict - use "EdusecTypography"
+/*
+*
+* typographie centralisée
+ */
 val EdusecTypography = Typography(
     displayLarge = TextStyle(
         fontFamily = FontFamily.Default,

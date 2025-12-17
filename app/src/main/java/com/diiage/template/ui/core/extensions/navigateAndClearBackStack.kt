@@ -6,10 +6,9 @@ import com.diiage.template.ui.core.Destination
 /**
  * Navigation “propre” vers une destination.
  *
- * - Remplace la backstack pour éviter de revenir sur l'écran précédent (ex : Splash).
- * - Utile après un écran d’entrée (Splash / Login).
+ * Remplace la retour pour éviter de revenir sur l'écran précédent (ex : Splash).
  *
- * @param destination Destination cible (type-safe via [Destination]).
+ * @param destination Destination cible
  *
  * @see NavController.navigate
  * @see androidx.navigation.NavOptionsBuilder.popUpTo
