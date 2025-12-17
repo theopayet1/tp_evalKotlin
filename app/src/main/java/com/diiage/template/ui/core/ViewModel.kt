@@ -1,5 +1,3 @@
-@file:Suppress("UnusedReceiverParameter")
-
 package com.diiage.template.ui.core
 
 import android.app.Application
@@ -11,7 +9,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 
@@ -81,22 +78,6 @@ open class ViewModel<State>(initialState: State, application: Application): Andr
         get() = _events.receiveAsFlow()
 
     /**
-     * Updates the current state using a transformation function.
-     *
-     * This method provides a safe way to update the state by applying a transformation
-     * function to the current state. The update is performed atomically.
-     *
-     * @param block A lambda that takes the current state and returns a new state
-     *
-     * @sample
-     * // Update state example:
-     * updateState { copy(isLoading = true, data = emptyList()) }
-     */
-    protected fun updateState(block: State.() -> State) {
-        _state.update { block.invoke(it) }
-    }
-
-    /**
      * Sends a one-time event to the UI layer.
      *
      * Events are useful for actions that should be handled once, such as showing
@@ -115,49 +96,6 @@ open class ViewModel<State>(initialState: State, application: Application): Andr
         }
     }
 
-    /**
-     * Collects data from a flow and handles the results on the appropriate dispatchers.
-     *
-     * This method automatically handles the coroutine context switching:
-     * - Collection happens on IO dispatcher for background work
-     * - Results are delivered on Main dispatcher for UI updates
-     * - Errors are caught and delivered as [Result.failure]
-     *
-     * @param T The type of data being collected
-     * @param source A suspending function that returns a flow to collect from
-     * @param onResult A callback function that receives the result of the collection
-     *
-     * @sample
-     * // Collect data example:
-     * collectData(
-     *     source = { repository.getLiveData() },
-     *     onResult = { result ->
-     *         result.onSuccess { data ->
-     *             updateState { copy(items = data) }
-     *         }.onFailure { error ->
-     *             sendEvent(ErrorEvent("Failed to load data: ${error.message}"))
-     *         }
-     *     }
-     * )
-     */
-    fun <T> collectData(
-        source: suspend () -> Flow<T>,
-        onResult: Result<T>.() -> Unit
-    ) {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                source().collect { newValue ->
-                    launch(Dispatchers.Main) {
-                        onResult(Result.success(newValue))
-                    }
-                }
-            } catch (ex: Throwable) {
-                launch(Dispatchers.Main) {
-                    onResult(Result.failure(ex))
-                }
-            }
-        }
-    }
 
     /**
      * Fetches data from a suspending function and handles the results on the appropriate dispatchers.

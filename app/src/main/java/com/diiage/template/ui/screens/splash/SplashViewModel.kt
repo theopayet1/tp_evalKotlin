@@ -31,12 +31,6 @@ class SplashViewModel(
         startSplashTimer()
     }
 
-    fun handleAction(action: SplashContracts.UiAction) {
-        when (action) {
-            SplashContracts.UiAction.SplashCompleted -> navigateToHome()
-        }
-    }
-
     private fun startSplashTimer() {
         fetchData(
             source = {

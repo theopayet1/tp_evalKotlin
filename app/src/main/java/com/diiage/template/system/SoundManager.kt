@@ -17,7 +17,4 @@ object SoundManager {
         toneGenerator.startTone(ToneGenerator.TONE_PROP_ACK, 120)
     }
 
-    fun release() {
-        toneGenerator.release()
-    }
 }

@@ -1,6 +1,7 @@
 @file:OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
 
 package com.diiage.template.ui.core.components
+import com.diiage.template.R
 
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenu
@@ -13,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.diiage.template.ui.core.theme.AppTheme
@@ -30,9 +32,9 @@ fun WaifuTopBar(
 ) {
     var expanded by remember { mutableStateOf(false) }
     val currentThemeLabel = when (ThemeManager.themeState) {
-        ThemeState.Light -> "Light"
-        ThemeState.Dark -> "Dark"
-        ThemeState.System -> "System"
+        ThemeState.Light -> Text(stringResource(R.string.theme_light))
+        ThemeState.Dark -> Text(stringResource(R.string.theme_dark))
+        ThemeState.System -> Text(stringResource(R.string.theme_system))
     }
 
     CenterAlignedTopAppBar(

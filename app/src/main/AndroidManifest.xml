@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- permet d'avoir le droit d'acceder a internet -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- permet d'avoir le droit de faire vibrer le tel -->
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:name=".Application"

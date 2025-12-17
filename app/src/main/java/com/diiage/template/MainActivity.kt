@@ -12,6 +12,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -35,6 +36,7 @@ class MainActivity : ComponentActivity() {
 fun App() {
     val navController = rememberNavController()
     val themeMenuViewModel: ThemeMenuViewModel = viewModel()
+    val context = LocalContext.current
 
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
@@ -43,8 +45,8 @@ fun App() {
         topBar = {
             if (currentRoute == Destination.Home.route) {
                 WaifuTopBar(
-                    onNextThemeClicked = { themeMenuViewModel.onNextThemeClicked() },
-                    onThemeSelected = { themeMenuViewModel.onThemeSelected(it) }
+                    onNextThemeClicked = { themeMenuViewModel.onNextThemeClicked(context) },// il trouve pas le contexte
+                    onThemeSelected = { theme -> themeMenuViewModel.onThemeSelected(context, theme) }
                 )
             }
         },
