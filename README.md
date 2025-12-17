@@ -1,98 +1,155 @@
-# TP Évaluation Kotlin Android — Waifu (waifu.im)
+# Waifu  
+Kotlin • Android • Jetpack Compose
 
-Projet Android Jetpack Compose (Kotlin) réalisé dans le cadre d’une évaluation “1 journée”.
-Objectif : application simple, propre, lisible et sans warnings.
+![Kotlin](https://img.shields.io/badge/Kotlin-2.0-blueviolet)
+![Android](https://img.shields.io/badge/Android-API%2029+-brightgreen)
+![Compose](https://img.shields.io/badge/Jetpack%20Compose-Material3-blue)
+![Architecture](https://img.shields.io/badge/Architecture-Clean%20%2F%20MVVM-orange)
+![License](https://img.shields.io/badge/License-Educational-lightgrey)
+
+---
+
+## Présentation
+
+**Waifu** est une application Android moderne développée en **Kotlin** avec **Jetpack Compose**.  
+Elle permet de consulter une sélection de **waifus en format portrait** à partir de l’API publique **waifu.im**.
+
+Le projet met l’accent sur :
+
+- la qualité logicielle,
+- une architecture claire et maintenable,
+- la séparation stricte des responsabilités,
+- une expérience utilisateur simple et compréhensible.
+
+Ce projet a été réalisé dans le cadre d’une **évaluation Kotlin Android (1 journée)**.
 
 ---
 
 ## Fonctionnalités
 
-- Écran **Splash** puis navigation automatique vers **Home**
-- Écran **Home** :
-  - récupère **10 images portrait** via l’API **waifu.im**
-  - affiche les images en **grille**
-  - gère **loading / erreur / retry**
-- **Thème** : Clair / Sombre / Système (menu dans la TopBar)
-  - feedback : **son + vibration** lors du changement de thème
-- **Variante de langue** :
-  - `values/strings.xml` (FR)
-  - `values-en/strings.xml` (EN) — libellés du menu thème
+- Écran **Splash** avec redirection automatique vers l’écran principal
+- Écran **Home**
+  - récupération de 10 images portrait via l’API
+  - affichage en grille
+  - gestion des états : chargement / erreur / retry
+- Gestion du **thème**
+  - Clair / Sombre / Système
+  - menu dans la TopBar
+  - feedback utilisateur : son et vibration
+- Variante de **langue**
+  - Français (par défaut)
+  - Anglais (`values-en`)
 
 ---
 
-## API (waifu.im)
+## API utilisée
 
-- Base URL : `https://api.waifu.im/`
-- Endpoint utilisé : `GET /search`
-- Paramètres :
+- Nom : waifu.im  
+- URL : https://api.waifu.im/
+- Endpoint : `/search`
+- Paramètres utilisés :
   - `included_tags=waifu`
   - `is_nsfw=false`
   - `orientation=PORTRAIT`
   - `limit=10`
 
-Client HTTP : **Ktor** (engine **CIO**) + `kotlinx.serialization`.
+Client HTTP : **Ktor (engine CIO)**  
+Sérialisation : **kotlinx.serialization**
 
 ---
 
-## Architecture (couches)
+## Architecture
 
-L’application est organisée en 3 couches principales :
+L’application suit une architecture en couches avec séparation stricte des responsabilités.
 
-### UI (`ui/`)
-- Écrans Compose (ex : `HomeScreen`)
-- ViewModels (MVVM) + gestion d’état (UDF)
-- **La UI ne dépend jamais de la couche data directement** : UI → domain → data
+### data
+- DTO représentant le format de l’API
+- Appels réseau via Ktor
+- Implémentation des repositories
+- Mapping DTO vers modèles métier
 
-### Domain (`domain/`)
-- Modèles métier (ex : `WaifuImage`)
-- Interfaces de repository (ex : `WaifuRepository`)
-- Use cases (ex : `GetPortraitWaifusUseCase`)
+### domain
+- Modèles métier
+- Interfaces de repository
+- Use cases représentant les actions métier
 
-### Data (`data/`)
-- DTO (`@Serializable` + `@SerialName`) : format API
-- Remote (Ktor) : appels réseau
-- Implémentations de repository + mapping DTO → domain
+### ui
+- Écrans Jetpack Compose
+- ViewModels (MVVM + UDF)
+- Navigation centralisée
+- Composants UI réutilisables
+
+La couche UI ne dépend jamais directement de la couche data.
 
 ---
 
-## Injection de dépendances (DI)
+## Design system et composants
 
-- Utilisation de **Koin** dans `di/AppModule.kt` :
-  - `HttpClient` Ktor
-  - `WaifuApi`
-  - `WaifuRepository`
-  - `UseCase`
-  - `HomeViewModel`
+- Thème Material 3 personnalisé
+- Couleurs et typographies centralisées
+- Composants réutilisables :
+  - `WaifuTopBar`
+  - `PrimaryButton`
+  - `MainScaffold`
+  - Helpers de layout (CenteredBox, Spacer, etc.)
+
+Une bibliothèque de composants est documentée afin de garantir la cohérence visuelle et la maintenabilité.
+
+---
+
+## Injection de dépendances
+
+- Utilisation de **Koin**
+- Dépendances injectées :
+  - HttpClient Ktor
+  - API distante
+  - Repository
+  - Use case
+  - ViewModel
+
+La configuration est centralisée dans un module unique (`appModule`).
 
 ---
 
 ## Navigation
 
-- Navigation Compose avec une sealed class `Destination` (routes centralisées)
-- Une extension `NavController.navigateAndClearBackStack(...)` est utilisée pour les cas type “Splash → Home”
-  afin d’éviter un retour arrière sur l’écran Splash.
+- Navigation Compose
+- Routes centralisées via une sealed class `Destination`
+- Extension `NavController.navigateAndClearBackStack(...)` pour les cas Splash → Home
+- Backstack nettoyée afin d’éviter un retour arrière vers l’écran Splash
 
 ---
 
-## Managers “système” (hardware)
+## Accès aux fonctionnalités système
 
-Les accès matériels sont centralisés et ne sont pas appelés directement depuis les Composables.
-
-- `system/SoundManager` : joue un son lors du changement de thème
-- Extension `Context.vibrateClick()` : vibration courte lors du changement de thème
-- Déclenchement uniquement via `ThemeMenuViewModel` (pas dans la UI)
+- `SoundManager` : gestion centralisée du son
+- Extension `Context.vibrateClick()` : vibration courte pour le feedback utilisateur
+- Les accès hardware sont déclenchés uniquement depuis les ViewModels, jamais depuis les Composables
 
 ---
 
 ## Ressources et conventions
 
-- Nommage des resources : **snake_case**
-- Textes externalisés via `stringResource(...)`
+- Nommage des resources en `snake_case`
+- Textes externalisés via `stringResource`
 - Variante de langue :
   - `res/values/strings.xml`
   - `res/values-en/strings.xml`
 
 ---
 
-## Structure des packages (résumé)
+## Qualité et bonnes pratiques
 
+- Aucune logique réseau dans la UI
+- DTO distincts des modèles métier
+- Asynchronisme géré via coroutines (`suspend`)
+- Zéro warning Gradle / lint / manifest
+- Code commenté avec des KDoc pour faciliter la compréhension et la maintenance
+
+---
+
+## Lancement du projet
+
+1. Ouvrir le projet dans Android Studio
+2. Synchroniser Gradle
+3. Lancer l’application sur un émulateur ou un appareil Android
